@@ -15,9 +15,11 @@ by Greg Girardin
 from __future__ import print_function
 import os
 import sys
-from  Tkinter import *
+#from  Tkinter import *
+from  tkinter import *
 from functools import partial
-import tkFont
+#import tkFont
+from tkinter import font as tkFont
 
 instrumentMap = \
   {
