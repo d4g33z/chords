@@ -15,10 +15,8 @@ by Greg Girardin
 from __future__ import print_function
 import os
 import sys
-#from  Tkinter import *
 from  tkinter import *
 from functools import partial
-#import tkFont
 from tkinter import font as tkFont
 
 instrumentMap = \
@@ -29,11 +27,12 @@ instrumentMap = \
   'Bass' :       { "t": ( "G", "D", "A", "E" ),           "f" : ( 0, 0, 0, 0 ) },
   '5Bass' :      { "t": ( "G", "D", "A", "E", "B" ),      "f" : ( 0, 0, 0, 0, 0 ) },
   'Uke' :        { "t": ( "A", "E", "C", "G" ),           "f" : ( 0, 0, 0, 0 ) },
-  'Banjo' :      { "t": ( "D", "B", "G", "D", "G" ),      "f" : ( 0, 0, 0, 0, 5 ) }
+  'Banjo' :      { "t": ( "D", "B", "G", "D", "G" ),      "f" : ( 0, 0, 0, 0, 5 ) },
+  'RGuitar' :     { "t": ( "E", "B", "G", "D", "A", "E" ), "f" : ( 0, 0, 1, 1, 1, 1 ) },
   }
 
 # pick the instruments you care about
-instruments = ('Guitar', 'Bass', 'Uke', 'Mandolin', 'Dropped D', '5Bass')
+instruments = ('Guitar', 'Bass', 'Uke', 'Mandolin', 'Dropped D', '5Bass','RGuitar')
 
 intervals = \
   {
