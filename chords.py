@@ -83,7 +83,8 @@ spellings = ( 'M',  'm',   '2', '4', '6', 'm6',
 extChords = ( '9', 'm9', 'M9','11', 'm11', 'M11', '13', 'm13', 'M13' )
 extIntervals = ( '9', '11', '13' )
 minorSpellings = ( 'm', 'm7', 'm9', 'm11', 'm13', 'm-Key' )
-NUM_FRETS = 15
+
+NUM_FRETS = 13
 
 disFont = { 0 : ( "TkFixedFont", 18, "bold italic" ),
             1 : ( "TkFixedFont", 14, "" ) }
