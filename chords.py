@@ -37,9 +37,9 @@ instruments = ('RGuitar','Guitar', 'Bass', 'Uke', 'Mandolin', 'Dropped D', '5Bas
 intervals = \
   {
     #use if spelling not in extChords
-  0 : ( 'R', '', '2', 'b3', '3',  '4', 'b5', '5', '',  '6', 'b7', '7' ),
+  0 : ( 'R', '', '2', 'b3', '3',  '4', 'b5', '5', 'b6',  '6', 'b7', '7' ),
     #use if spelling in extChords
-  1 : ( 'R', '', '9', 'b3', '3', '11', 'b5', '5', '', '13', 'b7', '7' )
+  1 : ( 'R', '', '9', 'b3', '3', '11', 'b5', '5', 'b13', '13', 'b7', '7' )
   }
 
 # display with a #/b if that's how we'd display the major key.
@@ -76,12 +76,13 @@ spellingMap = \
   "m-Key" : ( 'R',  '2', 'b3', '4', '5', 'b6', 'b7' ),
   "P-Min" : ( 'R',  'b3', '4', '5', 'b7' ),
   "P-Maj" : ( 'R',  '2',  '3', '5', '6' ),
+
   }
 spellings = ( 'M',  'm',   '2', '4', '6', 'm6',
               '7',  'm7',  'M7',
               '9',  'm9',  'M9',
               '11', 'm11', 'M11',
-              # '13', 'm13', 'M13',
+              '13', 'm13', 'M13',
               'dim', 'M-Key', 'm-Key', 'P-Min', 'P-Maj',
               'h-dim')
 extChords = ( '9', 'm9', 'M9','11', 'm11', 'M11', '13', 'm13', 'M13' )
