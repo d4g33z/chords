@@ -37,9 +37,9 @@ instruments = ('RGuitar','Guitar', 'Bass', 'Uke', 'Mandolin', 'Dropped D', '5Bas
 intervals = \
   {
     #use if spelling not in extChords
-  0 : ( 'R', '', '2', 'b3', '3',  '4', 'b5', '5', 'b6',  '6', 'b7', '7' ),
+  0 : ( 'R', 'b2', '2', 'b3', '3',  '4', 'b5', '5', 'b6',  '6', 'b7', '7' ),
     #use if spelling in extChords
-  1 : ( 'R', '', '9', 'b3', '3', '11', 'b5', '5', 'b13', '13', 'b7', '7' )
+  1 : ( 'R', 'b9', '9', 'b3', '3', '11', 'b5', '5', 'b13', '13', 'b7', '7' )
   }
 
 # display with a #/b if that's how we'd display the major key.
@@ -76,6 +76,7 @@ spellingMap = \
   "m-Key" : ( 'R',  '2', 'b3', '4', '5', 'b6', 'b7' ),
   "P-Min" : ( 'R',  'b3', '4', '5', 'b7' ),
   "P-Maj" : ( 'R',  '2',  '3', '5', '6' ),
+  "Chrom" : ( 'R', 'b2', '2', 'b3', '3',  '4', 'b5', '5', 'b6',  '6', 'b7', '7' ),
 
   }
 spellings = ( 'M',  'm',   '2', '4', '6', 'm6',
@@ -83,8 +84,9 @@ spellings = ( 'M',  'm',   '2', '4', '6', 'm6',
               '9',  'm9',  'M9',
               '11', 'm11', 'M11',
               '13', 'm13', 'M13',
-              'dim', 'M-Key', 'm-Key', 'P-Min', 'P-Maj',
-              'h-dim')
+              'dim','h-dim', 'M-Key', 'm-Key', 'P-Min', 'P-Maj',
+              'Chrom',
+              )
 extChords = ( '9', 'm9', 'M9','11', 'm11', 'M11', '13', 'm13', 'M13' )
 extIntervals = ( '9', '11', '13' )
 minorSpellings = ( 'm', 'm7', 'm9', 'm11', 'm13', 'm-Key' )
@@ -307,6 +309,31 @@ def runCli ():
       spellingIx = spellings.index( '7' )
     elif ch.upper() in dispKeyList:
       keyIx = dispKeyList.index( ch.upper() )
+
+import time
+def runAnimation():
+  my_spellings = ( 'M',  'm',   '2', '4', '6', 'm6',
+                  '7',  'm7',  'M7',
+                  '9',  'm9',  'M9',
+                  '11', 'm11', 'M11',
+                  '13', 'm13', 'M13',)
+  chord_sequence = list(zip(('C',)*len(my_spellings),my_spellings))
+
+  chord_sequence = ('CM7','Dm7','Em7','FM7','G7','Am7','Bdim')
+  fretboards = list(zip(chord_sequence,tuple(map(lambda x:generateFretboard( 'RGuitar', *x),chord_sequence))))
+  i=0
+  while True:
+    chord, fretboard = fretboards[i%len(fretboards)]
+    os.system( 'clear' )
+    print( fretboard[ 'instrument' ], chord[0], fretboard[ 'spelling' ] )
+
+    displayFretboard( fretboard )
+    displayFretboard( fretboard, True )
+
+    time.sleep(1)
+    i += 1
+
+
 
 class runGui ():
   '''
