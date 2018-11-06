@@ -53,8 +53,39 @@ chord_symbol_to_intervals = lambda y:list(filter(lambda x:x is not None,
 # chord_intervals = {root+symbol:chord_symbol_to_intervals(harmony.ChordSymbol(root+symbol)) \
 #             for symbol in symbols for root in roots}
 
-chord_intervals = {root+symbol:list(map(lambda x:x.chromatic,chord_symbol_to_intervals(harmony.ChordSymbol(root+symbol)))) \
-            for symbol in symbols for root in roots}
+# all_chord_intervals = {root+symbol:list(map(lambda x:x.chromatic.semitones,chord_symbol_to_intervals(harmony.ChordSymbol(root+symbol)))) \
+#             for symbol in symbols for root in roots}
 
 
+chord_intervals = {symbol if symbol != '' else 'M':list(map(lambda x:x.chromatic.semitones,
+            chord_symbol_to_intervals(harmony.ChordSymbol('C'+symbol)))) \
+            for symbol in symbols}
 
+intervals_to_names = {
+    0   : 'R',
+    1   : 'b2',
+    2   : '2',
+    3   : 'b3',
+    4   : '3',
+    5   : '4',
+    6   : 'b5',
+    7   : '5',
+    8   : 'b6',
+    9   : '6',
+    10  : 'b7',
+    11  : '7',
+    12  : 'R',
+    13  : 'b9',
+    14  : '9',
+    15  : 'b3',
+    16  : '3',
+    17  : '11',
+    18  : 'b5',
+    19  : '5',
+    20  : 'b13',
+    21  : '13',
+    22  : 'b7',
+    23  : '7'
+}
+
+chord_symbols = {symbol:list(map(lambda x:intervals_to_names.get(x),intervals)) for symbol,intervals in chord_intervals.items()}
