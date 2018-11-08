@@ -155,6 +155,108 @@ def fretInfoGen( root, fret, fretOffset, key, spelling ):
 
   return fretInfo
 
+from m21 import m21_spellings,m21_intervals,m21_spellingMap,m21_extChords
+def m21_fretInfoGen( root, fret, fretOffset, key, spelling ):
+  '''
+  Generate a dictionary entry about the given fret.
+  root is the string's fretOffset fret note. Usually fret 0 (open).
+  fret is the fret number relative to a zero offset string
+  note is the text of the note
+  '''
+  assert fret >= fretOffset, "Fret below fret offset."
+
+  fretInfo = {
+    'root' : root,
+    'fret' : fret,
+    'note' : calcNote( root, fret - fretOffset )
+  }
+
+  interval = calcInterval( fretInfo ['note'], key )
+
+  x = 1 if spelling in m21_extChords else 0
+
+  fretInfo[ 'interval' ] = m21_intervals[ x ][ interval ]
+  fretInfo[ 'inSpelling' ] = \
+    any(i in m21_spellingMap[ spelling ] for i in m21_intervals[ x ][ interval ])
+
+  # convert note for display
+  if showWithSharps( key, spelling ):
+    curKeyList = keyListSharps
+  else:
+    curKeyList = keyListFlats
+
+  fretInfo[ 'note' ] = curKeyList[ dispKeyList.index( fretInfo[ 'note' ] ) ]
+
+  return fretInfo
+
+def m21_generateFretboard( inst, key, spelling ):
+  '''
+  Returns a dictionary with everything we care about
+  strings are keyed by string number (1 - N) and contain a list of dictionaries for each fret
+  There are also some other 'global' kinda things.. numStrings, instrument, etc.
+
+  TBD: This should be removed. There is no reason to generate the fretboard in advance,
+  just generate frets on the fly while displaying.
+  '''
+
+  strings = instrumentMap[ inst ][ 't' ]
+
+  fretBoard = {
+                'numStrings' : len ( strings ),
+                'instrument' : inst,
+                'spelling'   : spelling,
+                'fretOffset' : instrumentMap[ inst ][ 'f' ]
+              }
+
+  for string in range ( 1, len ( strings ) + 1 ):
+    stringList = []
+    rootNote = strings[ string - 1 ]
+    offset = instrumentMap[ inst ][ 'f' ][ string - 1 ]
+
+    for fret in range ( offset, NUM_FRETS + 1 ):
+      fretInfo = m21_fretInfoGen( rootNote, fret, offset, key, spelling )
+      stringList.append( fretInfo )
+
+    fretBoard [string] = stringList
+
+  return fretBoard
+
+def m21_displayFretboard( fretboard, interval = False ):
+  numStrings = fretboard[ 'numStrings' ]
+
+  print( "\n  ", end = "" )
+  for fret in range ( 0, NUM_FRETS + 1 ):
+    print( "%2s   " % fret, end = "" )
+    if fret == 9: # formatting hack
+      print( " ", end="" )
+
+  print()
+  for stringNum in range( 1, numStrings + 1 ):
+    string = fretboard[ stringNum ]
+
+    print( string[ 0 ][ 'note' ], " ", end = "", sep = "" )
+    print( "     " * fretboard[ 'fretOffset' ][ stringNum - 1 ], end = "" )
+
+    for fret in string:
+      if fretboard[ 'fretOffset' ][ stringNum - 1 ] == fret[ 'fret' ]:
+        fretChar = "x"
+      else:
+        fretChar = "|"
+
+      if fret[ 'inSpelling' ]:
+        if interval:
+          value = fret[ 'interval' ][0].replace('-','b')
+        else:
+          value = fret[ 'note' ]
+
+        if len( value ) == 1:
+          value += "-"
+
+        print( "-%s-%s" % ( value, fretChar ), end = "", sep='' )
+      else:
+        print( "----%s" % fretChar, end = "" )
+    print ()
+
 def generateFretboard( inst, key, spelling ):
   '''
   Returns a dictionary with everything we care about
@@ -245,6 +347,28 @@ def displayInfo( instrument, key, spelling ):
   print( "a..g -= : Key" )
   print( "q : quit" )
 
+def m21_displayInfo( instrument, key, spelling ):
+  os.system( 'clear' )
+
+  fretboard = m21_generateFretboard( instrument, key, spelling )
+
+  print( fretboard[ 'instrument' ], key, fretboard[ 'spelling' ] )
+  m21_displayFretboard( fretboard )
+  m21_displayFretboard( fretboard, True )
+  print ()
+
+  # help
+  print( "i : Instruments: ", end="" )
+  for inst in instruments:
+    print( inst, "", end = "" )
+  print()
+  print( "mr7[] : Spellings: ", end="" )
+  for spel in m21_spellings:
+    print(spel, "", end="" )
+  print()
+  print( "a..g -= : Key" )
+  print( "q : quit" )
+
 def getInput ():
   """
   Copied from http://stackoverflow.com/questions/983354/how-do-i-make-python-to-wait-for-a-pressed-key
@@ -307,6 +431,45 @@ def runCli ():
       spellingIx = spellings.index( 'm-Key' )
     elif ch == '7':
       spellingIx = spellings.index( '7' )
+    elif ch.upper() in dispKeyList:
+      keyIx = dispKeyList.index( ch.upper() )
+
+def m21_runCli ():
+  keyIx = 0
+  instrumentIx = 0
+  spellingIx = 0
+
+  while True:
+    m21_displayInfo( instruments[ instrumentIx ], dispKeyList[ keyIx ], m21_spellings[ spellingIx ] )
+
+    ch = getInput ()
+    if ch == 'q':
+      exit()
+    elif ch == 'i':
+      instrumentIx += 1
+      instrumentIx %= len( instruments )
+    elif ch == ']':
+      spellingIx += 1
+      spellingIx %= len( m21_spellings )
+    elif ch == '[':
+      if spellingIx > 0:
+        spellingIx -= 1
+      else:
+        spellingIx = len( m21_spellings ) - 1
+    elif ch == '=':
+      keyIx += 1
+      keyIx %= len( dispKeyList )
+    elif ch == '-':
+      if ( keyIx > 0 ):
+        keyIx -= 1
+      else:
+        keyIx = len( dispKeyList ) - 1
+    # elif ch == 'm':
+    #   spellingIx = spellings.index( 'M-Key' )
+    # elif ch == 'r':
+    #   spellingIx = spellings.index( 'm-Key' )
+    # elif ch == '7':
+    #   spellingIx = spellings.index( '7' )
     elif ch.upper() in dispKeyList:
       keyIx = dispKeyList.index( ch.upper() )
 
@@ -499,6 +662,6 @@ class runGui ():
     root.mainloop()
 
 if 'c' in sys.argv:
-  runCli()
+  m21_runCli()
 else:
   runGui()
