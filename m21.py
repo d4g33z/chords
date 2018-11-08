@@ -6,6 +6,9 @@ from music21 import serial,harmony,pitch
 m21_spellingMap = {names[0] if names[0] is not '' else 'M':
                        tuple(['R'] + intstr.split(',')[1:]) for key,(intstr,names) in harmony.CHORD_TYPES.items()}
 
+m21_chord_names = {names[0] if names[0] is not '' else 'M':
+                        chord_name for chord_name,(intstr,names) in harmony.CHORD_TYPES.items()}
+
 m21_intervals = \
   {
     #use if spelling not in extChords

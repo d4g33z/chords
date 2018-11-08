@@ -347,12 +347,13 @@ def displayInfo( instrument, key, spelling ):
   print( "a..g -= : Key" )
   print( "q : quit" )
 
+from m21 import m21_chord_names
 def m21_displayInfo( instrument, key, spelling ):
   os.system( 'clear' )
 
   fretboard = m21_generateFretboard( instrument, key, spelling )
 
-  print( fretboard[ 'instrument' ], key, fretboard[ 'spelling' ] )
+  print( fretboard[ 'instrument' ], key, m21_chord_names[spelling],'('+fretboard[ 'spelling' ]+')')
   m21_displayFretboard( fretboard )
   m21_displayFretboard( fretboard, True )
   print ()
@@ -362,9 +363,9 @@ def m21_displayInfo( instrument, key, spelling ):
   for inst in instruments:
     print( inst, "", end = "" )
   print()
-  print( "mr7[] : Spellings: ", end="" )
-  for spel in m21_spellings:
-    print(spel, "", end="" )
+  # print( "mr7[] : Spellings: ", end="" )
+  # for spel in m21_spellings:
+  #   print(spel, "", end="" )
   print()
   print( "a..g -= : Key" )
   print( "q : quit" )
