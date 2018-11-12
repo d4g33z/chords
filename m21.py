@@ -4,7 +4,7 @@ import numpy as npy
 from music21 import serial,harmony,pitch
 
 m21_spellingMap = {names[0] if names[0] is not '' else 'M':
-                       tuple(['R'] + intstr.split(',')[1:]) for key,(intstr,names) in harmony.CHORD_TYPES.items()}
+                       tuple(['R'] + intstr.split(',')[1:]) for chord_name,(intstr,names) in harmony.CHORD_TYPES.items()}
 
 m21_chord_names = {names[0] if names[0] is not '' else 'M':
                         chord_name for chord_name,(intstr,names) in harmony.CHORD_TYPES.items()}
@@ -33,11 +33,11 @@ m21_intervals = \
     3:('-3','#9'),
     4:('3',),
     5:('11',),
-    6:('-5','#4'),
+    6:('-5','#11'),
     7:('5',),
     8:('-6','#5',),
-    9:('13',),
-    10:('-7',),
+    9:('13','--7'),
+    10:('-7','#6'),
     11:('7',) },
     #use if spelling in extChords
 

@@ -162,14 +162,19 @@ def m21_displayFretboard( fretboard, interval = False ):
 
       if fret[ 'inSpelling' ]:
         if interval:
-          value = fret[ 'interval' ][0].replace('-','b')
+          value = fret[ 'interval' ][0].replace('-','b') \
+            if fret['interval'][0] in m21_spellingMap[fretboard['spelling']] else fret[ 'interval' ][1].replace('-','b')
         else:
           value = fret[ 'note' ]
 
         if len( value ) == 1:
+        # value += "-"
+          value += "--"
+        elif len( value ) == 2:
           value += "-"
 
-        print( "-%s-%s" % ( value, fretChar ), end = "", sep='' )
+        # print( "-%s-%s" % ( value, fretChar ), end = "", sep='' )
+        print( "-%s%s" % ( value, fretChar ), end = "", sep='' )
       else:
         print( "----%s" % fretChar, end = "" )
     print ()
