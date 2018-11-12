@@ -269,24 +269,17 @@ def m21_runCli ():
       keyIx = dispKeyList.index( ch.upper() )
 
 import time
-def runAnimation():
-  my_spellings = ( 'M',  'm',   '2', '4', '6', 'm6',
-                  '7',  'm7',  'M7',
-                  '9',  'm9',  'M9',
-                  '11', 'm11', 'M11',
-                  '13', 'm13', 'M13',)
-  chord_sequence = list(zip(('C',)*len(my_spellings),my_spellings))
-
-  chord_sequence = ('CM7','Dm7','Em7','FM7','G7','Am7','Bdim')
-  fretboards = list(zip(chord_sequence,tuple(map(lambda x:generateFretboard( 'RGuitar', *x),chord_sequence))))
+def runAnimation(*chords):
+  chord_sequence = list(map(lambda x:(x[0],x[1:]),chords))
+  fretboards = list(zip(chord_sequence,tuple(map(lambda x:m21_generateFretboard( 'RGuitar', *x),chord_sequence))))
   i=0
   while True:
     chord, fretboard = fretboards[i%len(fretboards)]
     os.system( 'clear' )
     print( fretboard[ 'instrument' ], chord[0], fretboard[ 'spelling' ] )
 
-    displayFretboard( fretboard )
-    displayFretboard( fretboard, True )
+    m21_displayFretboard( fretboard )
+    m21_displayFretboard( fretboard, True )
 
     time.sleep(1)
     i += 1
